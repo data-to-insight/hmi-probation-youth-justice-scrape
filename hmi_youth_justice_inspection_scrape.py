@@ -242,9 +242,9 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         'Due to report formatting variations and PDF encoding nuances, <br/>some extractions may be incomplete or inaccurate. '
         'Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
     )
+    
     # fix col order if needed
     # data_df = data_df[column_order]
-    print(data_df.columns) # debug
 
     # web links to clickable HTML hyperlinks
     if web_link_column in data_df.columns:
