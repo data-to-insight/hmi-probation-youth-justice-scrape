@@ -242,7 +242,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         'Due to report formatting variations and PDF encoding nuances, <br/>some extractions may be incomplete or inaccurate. '
         'Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
     )
-    
+
     # fix col order if needed
     # data_df = data_df[column_order]
 
@@ -254,6 +254,9 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
             if isinstance(x, str) and x.startswith("http") else x
         )
 
+    # in web version la ref is just clutter. the same is visible in the url anyway. 
+    if 'la_ref' in data_df.columns:
+        data_df.drop(columns=['la_ref'], inplace=True)
 
     # Avoid NaN's being visible in the front-end/html table
     data_df = data_df.apply(lambda x: x.fillna("").infer_objects(copy=False) if x.dtype == "object" else x)
