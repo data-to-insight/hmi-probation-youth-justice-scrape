@@ -9,6 +9,9 @@ import pandas as pd
 import PyPDF2
 import io  # handling PDF byte stream
 
+
+pd.set_option('future.no_silent_downcasting', True)
+
 # url paginated search (per year)
 base_url = "https://www.justiceinspectorates.gov.uk/hmiprobation/inspections?probation-inspection-type=inspection-of-youth-offending-services-2018-onwards"
 
@@ -249,7 +252,8 @@ def save_to_html(data_df, column_order, web_link_column="Report URL"):
         )
 
     # Avoid NaN's being visible in the front-end/html table
-    data_df = data_df.apply(lambda x: x.fillna("") if x.dtype == "object" else x)
+    data_df = data_df.apply(lambda x: x.fillna("").infer_objects(copy=False) if x.dtype == "object" else x)
+
 
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
@@ -312,7 +316,7 @@ structured_data_df.columns = (
     structured_data_df.columns
     .str.strip()  # leading/trailing spaces
     .str.replace(r"\s+", " ", regex=True)  # multiple spaces to single space
-    .str.replace(r"[^\w\s]", "", regex=True)  # special chars
+    .str.replace(r"[^\w\s%]", "", regex=True)  # rem special chars but keep %
     .str.replace(" ", "_", regex=True)  # spaces to underscores
     .str.replace("-", "_", regex=True)  # hyphens to underscores
     .str.replace(" ", "", regex=True)  # quash remaining spaces
