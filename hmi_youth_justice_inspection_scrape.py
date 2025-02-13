@@ -225,11 +225,11 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         web_link_column (str): Column containing hyperlinks to reports.
     """
     # main page title & intro text
-    page_title = "HMI Probation Youth Justice Inspections Summary (Alpha version)"
+    page_title = "HMI Probation Youth Justice Inspections Summary (Pre-Release)"
     intro_text = (
         'Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>'
-        'The summary and tool are in review/alpha release for feedback and suggested further development. <br/>'
-        'It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers.<br/><br/>'
+        'The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>'
+        'It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>'
         'A .csv version of the below summary, refreshed concurrently, is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; the expanded .xlsx version will replace this format.<br/>'
         'Read more about this tool/project '
         '<a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.'
@@ -238,9 +238,9 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     disclaimer_text = (
         'Disclaimer:<br/>' 
         'This summary is built from scraped data directly from '
-        '<a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports.<br/>'
-        'Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate.<br/>'
-        'Feedback or corrections? <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
+        '<a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>'
+        'Due to report formatting variations and PDF encoding nuances, <br/>some extractions may be incomplete or inaccurate. '
+        'Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
     )
     # fix col order if needed
     # data_df = data_df[column_order]
