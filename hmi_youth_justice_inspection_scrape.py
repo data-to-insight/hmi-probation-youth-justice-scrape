@@ -215,7 +215,7 @@ def scrape_inspections():
 
 
 
-def save_to_html(data_df, column_order, web_link_column="Report URL"):
+def save_to_html(data_df, column_order, web_link_column="report_url"):
     """
     Exports data to an HTML table and saves as `index.html`.
 
