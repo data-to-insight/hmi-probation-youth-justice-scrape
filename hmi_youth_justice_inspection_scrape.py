@@ -34,7 +34,7 @@ def clean_la_name(raw_name):
     """Clean and standardise the local authority name."""
     # Remove common prefix(es) (note 'justice' & 'offending')
     cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+youth\s+justice\s+services\s+in\s+", "", raw_name).strip()
-    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+youth\s+offending\s+services\s+in\s+", "", raw_name).strip()
+    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+youth\s+offending\s+services\s+in\s+", "", cleaned_name).strip()
 
     # named fixes
     fix_mappings = {
@@ -228,16 +228,17 @@ def save_to_html(data_df, column_order, web_link_column="Report URL"):
     page_title = "HMI Probation Youth Justice Inspections Summary (Alpha version)"
     intro_text = (
         'Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>'
-        'This summary, and the tool itself are very much in review/alpha testing. It is not yet suitable for developing on top.<br/>'
-        'A .csv version of this summary, refreshed concurrently, is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>.<br/>'
-        'An expanded .xlsx version will replace this.<br/>'
+        'The summary and tool are in review/alpha release for feedback and suggested further development. <br/>'
+        'It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers.<br/><br/>'
+        'A .csv version of the below summary, refreshed concurrently, is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; the expanded .xlsx version will replace this format.<br/>'
         'Read more about this tool/project '
         '<a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.'
     )
 
     disclaimer_text = (
-        'Disclaimer: This summary is built from scraped data directly from '
-        '<a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. '
+        'Disclaimer:<br/>' 
+        'This summary is built from scraped data directly from '
+        '<a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports.<br/>'
         'Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate.<br/>'
         'Feedback or corrections? <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
     )
@@ -247,9 +248,12 @@ def save_to_html(data_df, column_order, web_link_column="Report URL"):
 
     # web links to clickable HTML hyperlinks
     if web_link_column in data_df.columns:
+        base_url_to_remove = "https://www.justiceinspectorates.gov.uk/hmiprobation/"
         data_df[web_link_column] = data_df[web_link_column].apply(
-            lambda x: f'<a href="{x}">HMI Probation Report</a>' if isinstance(x, str) and x.startswith("http") else x
+            lambda x: f'<a href="{x}">{x.replace(base_url_to_remove, "")}</a>' 
+            if isinstance(x, str) and x.startswith("http") else x
         )
+
 
     # Avoid NaN's being visible in the front-end/html table
     data_df = data_df.apply(lambda x: x.fillna("").infer_objects(copy=False) if x.dtype == "object" else x)
@@ -353,9 +357,6 @@ column_order = [
     'joint_working', 'partnerships_and_services'
 ]
 
-
-print(structured_data_df.columns) # debug
-print(column_order)
 
 # create output/published single page
 save_to_html(structured_data_df, column_order)
