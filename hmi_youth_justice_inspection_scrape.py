@@ -32,9 +32,19 @@ def get_soup(url, max_attempts=2, delay=2):
             
 def clean_la_name(raw_name):
     """Clean and standardise the local authority name."""
-    # Remove common prefix(es) (note 'justice' & 'offending')
-    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+youth\s+justice\s+services\s+in\s+", "", raw_name).strip()
-    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+youth\s+offending\s+services\s+in\s+", "", cleaned_name).strip()
+    # Remove common prefix(es) ('justice' & 'offending', 'services' is optional)
+    cleaned_name = re.sub(
+        r"(?i)^An\s+inspection\s+of\s+youth\s+(justice|offending)\s+(services\s+)?in\s+", 
+        "", 
+        raw_name
+    ).strip()
+
+    if re.match(r"(?i)^A\s+joint\s+inspection\s+of\s+", cleaned_name):
+        cleaned_name = re.sub(r"(?i)^A\s+joint\s+inspection\s+of\s+", "", cleaned_name).strip()
+        cleaned_name += " - Joint_Inspection" # leave indicator it was JYJI
+
+    # for those where neither youth, offending, justice nor services appear in str
+    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+", "", cleaned_name).strip()
 
     # named fixes
     fix_mappings = {
@@ -51,15 +61,16 @@ def clean_la_name(raw_name):
     return cleaned_name
             
 def normalise_text(text):
+    # this needs integrating elsewhere # debug
     return " ".join(text.lower().split())
-     
+
 def scrape_inspection_links(start_year=None, end_year=2018):
     """Scrape all inspection links for each year, ensuring no duplicates."""
     inspection_links = {}
     
     if start_year is None:
-        start_year = datetime.now().year  # set to current year
-  
+        start_year = datetime.now().year  # Default to current year
+
     for year in range(start_year, end_year - 1, -1):
         page = 0
         while True:
@@ -68,7 +79,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
             
             soup = get_soup(paginated_url)
             if not soup:
-                break  # if page not fetched (==no more results showing)
+                break  # Stop if the page is unavailable
             
             results = soup.find_all("div", class_="result inspection")
             if not results:
@@ -81,22 +92,93 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                     report_url = link_element["href"]
                     report_name = link_element.text.strip()
                     
-                    # get (unique?) ref from URL (e.g., /readingyjs2024/ -> "readingyjs")
+                    # Extract unique ref from URL (e.g., /readingyjs2024/ -> "readingyjs")
                     la_ref = re.sub(r"\d{4}$", "", report_url.split("/")[-2]).lower().strip()
                     
-                    # clean_la_name
-                    la_name = clean_la_name(report_name)  
+                    # ✅ Clean LA Name
+                    la_name = clean_la_name(report_name)
 
+                    # ✅ Extract Date of Publication by visiting full report page
+                    publication_date = "Unknown"
+                    report_soup = get_soup(report_url)
+                    if report_soup:
+                        meta_div = report_soup.find("div", id="inspection-meta")
+                        if meta_div:
+                            date_dt = meta_div.find("dt", string=lambda text: "Date of publication" in text)
+                            if date_dt:
+                                date_dd = date_dt.find_next_sibling("dd")
+                                if date_dd:
+                                    raw_date = date_dd.text.strip()
+                                    try:
+                                        # Convert to DD/MM/YYYY format
+                                        formatted_date = datetime.strptime(raw_date, "%d %B %Y").strftime("%d/%m/%Y")
+                                        publication_date = formatted_date
+                                    except ValueError:
+                                        print(f"⚠️ Failed to parse date for {la_name}: {raw_date}")
+
+                    # ✅ Store results
                     if la_ref not in inspection_links:
-                        inspection_links[la_ref] = {"url": report_url, "name": la_name, "year": year}  # cleaned `la_name`
-                        print(f"Added: {la_name} ({year})")
+                        inspection_links[la_ref] = {
+                            "url": report_url,
+                            "name": la_name,
+                            "year": year,
+                            "publication_date": publication_date  # New field added
+                        }
+                        print(f"✅ Added: {la_name} ({year}) - Published on {publication_date}")
                     else:
                         print(f"🔁 Skipped duplicate: {la_name} ({year})")
-            
+
             page += 1
             time.sleep(2)
-    
+
     return inspection_links
+
+
+
+# def scrape_inspection_links(start_year=None, end_year=2018):
+#     """Scrape all inspection links for each year, ensuring no duplicates."""
+#     inspection_links = {}
+    
+#     if start_year is None:
+#         start_year = datetime.now().year  # set to current year
+  
+#     for year in range(start_year, end_year - 1, -1):
+#         page = 0
+#         while True:
+#             paginated_url = f"{base_url}&paged={page}&year={year}"
+#             print(f"📄 Fetching: {paginated_url}")
+            
+#             soup = get_soup(paginated_url)
+#             if not soup:
+#                 break  # if page not fetched (==no more results showing)
+            
+#             results = soup.find_all("div", class_="result inspection")
+#             if not results:
+#                 print(f"✅ No results found for year {year}, stopping pagination.")
+#                 break
+            
+#             for result in results:
+#                 link_element = result.find("h4").find("a", href=True)
+#                 if link_element:
+#                     report_url = link_element["href"]
+#                     report_name = link_element.text.strip()
+                    
+#                     # get (unique?) ref from URL (e.g., /readingyjs2024/ -> "readingyjs")
+#                     la_ref = re.sub(r"\d{4}$", "", report_url.split("/")[-2]).lower().strip()
+                    
+#                     # clean_la_name
+#                     la_name = clean_la_name(report_name)  
+
+#                     if la_ref not in inspection_links:
+#                         inspection_links[la_ref] = {"url": report_url, "name": la_name, "year": year}  # cleaned `la_name`
+#                         print(f"Added: {la_name} ({year})") # debug
+#                     else:
+#                         print(f"🔁 Skipped duplicate: {la_name} ({year})")
+            
+#             page += 1
+#             time.sleep(2)
+    
+#     return inspection_links
 
 
 # scraper and collect report links
@@ -129,7 +211,7 @@ def extract_ratings_from_pdf(pdf_url):
     return ratings_text if ratings_text else "Ratings page not found"
 
 
-def parse_ratings(report_url, ratings_text, la_ref, la_name):
+def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
     """Parse extracted text from PDFs to structure the ratings."""
     lines = ratings_text.split("\n")
     overall_rating = None
@@ -171,6 +253,7 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name):
         "LA_ref": la_ref,
         "Score_%": score if score else "N/A",
         "Overall Rating": overall_rating,
+        "publication_date": publication_date,  
         "Report URL": report_url,
         **graded_outcomes
     }
@@ -183,14 +266,16 @@ def scrape_inspections():
 
     for la_ref, details in inspection_data.items():
         report_url = details["url"]
-        la_name = clean_la_name(details["name"])  # ✅ Always clean here once
+        la_name = clean_la_name(details["name"])  # cleaned
+        publication_date = details.get("publication_date", "Unknown") 
+
         print(f"\n📥 Processing: {la_name} ({details['year']}) \n-> {report_url}")
 
         soup = get_soup(report_url)
         if not soup:
             continue
 
-        # Find first valid PDF link
+        # Find first valid PDF link (inspection reports always top/first)
         pdf_url = None
         for pdf_link in soup.find_all("a", href=True):
             if "inspection" in normalise_text(pdf_link.text) and pdf_link["href"].endswith(".pdf"):
@@ -204,9 +289,9 @@ def scrape_inspections():
         # Grab & parse ratings
         ratings_text = extract_ratings_from_pdf(pdf_url)
         if ratings_text != "Ratings page not found":
-            parsed_data = parse_ratings(report_url, ratings_text, la_ref, la_name)  # ✅ Pass cleaned name
+            parsed_data = parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date)  
             ratings_data.append(parsed_data)
-            print(f"✅ Data extracted for {la_name}")
+            print(f"✅ Data extracted for {la_name} - Published on {publication_date}")
 
         time.sleep(2)  # Avoid request overload
 
@@ -351,7 +436,7 @@ print("Data saved to hmi_youth_justice_inspection_ratings.csv")
 
 
 column_order = [
-    'la_name', 'la_ref', 'score_%', 'overall_rating', 'report_url',
+    'la_name', 'la_ref', 'score_%', 'overall_rating', 'publication_date', 'report_url',
     'governance_and_leadership', 'staff', 'partnerships_and_services',
     'information_and_facilities', 'assessment', 'planning',
     'implementation_and_delivery', 'reviewing',
