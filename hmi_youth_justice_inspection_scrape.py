@@ -230,7 +230,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         'Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>'
         'The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>'
         'It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>'
-        'A .csv version of the below summary, refreshed concurrently, is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; the expanded .xlsx version will replace this format.<br/>'
+        'The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>'
         'Read more about this tool/project '
         '<a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.'
     )
@@ -239,7 +239,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         'Disclaimer:<br/>' 
         'This summary is built from scraped data directly from '
         '<a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>'
-        'Due to report formatting variations and PDF encoding nuances, <br/>some extractions may be incomplete or inaccurate. '
+        'Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate. '
         'Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.'
     )
 
