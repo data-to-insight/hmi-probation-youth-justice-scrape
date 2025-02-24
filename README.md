@@ -12,7 +12,7 @@ This repository contains a **scraper for HM Inspectorate of Probation Youth Just
 
 ## 🔧 Setup & Running  
 
-To install dependencies and run the scraper, simply execute:  
+To install dependencies and run the scraper, run (might need permissions set but details in the file header):  
 
 ```bash
 ./setup.sh
@@ -23,8 +23,8 @@ To install dependencies and run the scraper, simply execute:
 This will:  
 
 - ✅ Install required **Python libraries**  
-- ✅ Run the scraper to **collect and process data**  
-- ✅ Generate an **up-to-date HTML summary**  
+- ✅ Run scraper to **Collect/process data**  
+- ✅ Generate an **Current HTML summary**  
 
 ---
 
@@ -41,7 +41,7 @@ The scraper **currently focuses on Youth Justice inspections**, but could be **e
 
 ## 📢 Feedback & Contributions  
 
-This tool is still **in early development**, and improvements are ongoing. If you encounter any issues, incorrect data extraction, or have suggestions, feel free to:  
+This tool is still **in early dev/alpha**, and improvements are ongoing. If you encounter any issues, incorrect data extraction, or have suggestions, feel free to:  
 
 - 🛠 **Open an issue** in this GitHub repo  
 - 📩 **Email us** at [datatoinsight.enquiries@gmail.com](mailto:datatoinsight.enquiries@gmail.com)  
