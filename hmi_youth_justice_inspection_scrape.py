@@ -452,6 +452,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
 
+    report_url_index = list(data_df.columns).index("report_url") + 1  # Convert to 1-based index
 
 
     # generate HTML content
