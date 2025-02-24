@@ -23,7 +23,7 @@ def get_soup(url, max_attempts=2, delay=2):
             response.raise_for_status()
             return BeautifulSoup(response.content, "html.parser")
         except requests.RequestException as e:
-            print(f"⚠️ Attempt {attempt} failed: {e}")
+            print(f"Attempt {attempt} failed: {e}")
             if attempt < max_attempts:
                 time.sleep(delay)
             else:
@@ -59,10 +59,6 @@ def clean_la_name(raw_name):
     cleaned_name = fix_mappings.get(cleaned_name_lower, cleaned_name)
 
     return cleaned_name
-            
-def normalise_text(text):
-    # this needs integrating elsewhere # debug
-    return " ".join(text.lower().split())
 
 def scrape_inspection_links(start_year=None, end_year=2018):
     """Scrape all inspection links for each year, ensuring no duplicates."""
@@ -75,7 +71,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
         page = 0
         while True:
             paginated_url = f"{base_url}&paged={page}&year={year}"
-            print(f"📄 Fetching: {paginated_url}")
+            print(f"Fetching: {paginated_url}")
             
             soup = get_soup(paginated_url)
             if not soup:
@@ -83,7 +79,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
             
             results = soup.find_all("div", class_="result inspection")
             if not results:
-                print(f"✅ No results found for year {year}, stopping pagination.")
+                print(f"No results found for year {year}, stopping pagination.")
                 break
             
             for result in results:
@@ -95,10 +91,10 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                     # Extract unique ref from URL (e.g., /readingyjs2024/ -> "readingyjs")
                     la_ref = re.sub(r"\d{4}$", "", report_url.split("/")[-2]).lower().strip()
                     
-                    # ✅ Clean LA Name
+                    # Clean LA Name
                     la_name = clean_la_name(report_name)
 
-                    # ✅ Extract Date of Publication by visiting full report page
+                    # Extract Date of Publication by visiting full report page
                     publication_date = "Unknown"
                     report_soup = get_soup(report_url)
                     if report_soup:
@@ -116,7 +112,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                                     except ValueError:
                                         print(f"⚠️ Failed to parse date for {la_name}: {raw_date}")
 
-                    # ✅ Store results
+                    # Store results
                     if la_ref not in inspection_links:
                         inspection_links[la_ref] = {
                             "url": report_url,
@@ -124,7 +120,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                             "year": year,
                             "publication_date": publication_date  # New field added
                         }
-                        print(f"✅ Added: {la_name} ({year}) - Published on {publication_date}")
+                        print(f"Added: {la_name} ({year}) - Published on {publication_date}")
                     else:
                         print(f"🔁 Skipped duplicate: {la_name} ({year})")
 
@@ -146,7 +142,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
 #         page = 0
 #         while True:
 #             paginated_url = f"{base_url}&paged={page}&year={year}"
-#             print(f"📄 Fetching: {paginated_url}")
+#             print(f"Fetching: {paginated_url}")
             
 #             soup = get_soup(paginated_url)
 #             if not soup:
@@ -154,7 +150,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
             
 #             results = soup.find_all("div", class_="result inspection")
 #             if not results:
-#                 print(f"✅ No results found for year {year}, stopping pagination.")
+#                 print(f"No results found for year {year}, stopping pagination.")
 #                 break
             
 #             for result in results:
@@ -173,7 +169,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
 #                         inspection_links[la_ref] = {"url": report_url, "name": la_name, "year": year}  # cleaned `la_name`
 #                         print(f"Added: {la_name} ({year})") # debug
 #                     else:
-#                         print(f"🔁 Skipped duplicate: {la_name} ({year})")
+#                         print(f"Skipped duplicate: {la_name} ({year})")
             
 #             page += 1
 #             time.sleep(2)
@@ -185,7 +181,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
 inspection_data = scrape_inspection_links()
 
 # debug / ref
-print("\n🔍 Final Inspection Links Collected:")
+print("\nFinal Inspection Links Collected:")
 for ref, details in inspection_data.items():
     print(f"{details['year']}: {details['name']} -> {details['url']}")
 
@@ -202,13 +198,80 @@ def extract_ratings_from_pdf(pdf_url):
         return "Ratings page not found"
 
     ratings_text = ""
-    for page in reader.pages[2:]:  # skip first two pages (usually cover+contents page)
+    for page in reader.pages[2:]:  # skip first two pages (usually cover+contents page and they cause extract issues if left)
         text = page.extract_text()
         if text and ("ratings" in text.lower() or "overall rating" in text.lower()):
             ratings_text += text
             break  
 
     return ratings_text if ratings_text else "Ratings page not found"
+
+
+# def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
+#     """Parse extracted text from PDFs to structure the ratings."""
+#     lines = ratings_text.split("\n")
+#     overall_rating = None
+#     score = None
+#     graded_outcomes = {}
+
+#     grading_outcomes = {"inadequate", "requires improvement", "good", "outstanding"}
+
+#     for i, line in enumerate(lines):
+#         line = re.sub(r"\s+", " ", line).strip()
+
+#         # overall rating
+#         if "Overall rating" in line:
+#             overall_rating = line.split("Overall rating")[-1].strip()
+
+#         # numerical score as %
+#         score_match = re.search(r"\b(\d+)/(\d+)\b", line)
+#         if score_match and score is None:
+#             try:
+#                 numerator, denominator = map(int, score_match.groups())
+#                 if denominator > 0:
+#                     score = round((numerator / denominator) * 100, 2)
+#             except ValueError:
+#                 print(f"⚠️ Error parsing score in: {line}")
+
+#     cleaned_lines = [re.sub(r"\s+", " ", line).strip() for line in lines if line.strip()]
+
+#     for line in cleaned_lines:
+#         match = re.match(r"^[PR]?\s*(\d+\.\d+)\s(.+?)\s(\w+)$", line)
+#         if match:
+#             category_name = match.group(2).strip()
+#             grade = match.group(3).capitalize()
+
+#             if grade.lower() in grading_outcomes:
+#                 graded_outcomes[category_name] = grade
+
+#     return {
+#         # Note: need to review/improve consistency on these (case, space/underscore)
+#         "LA_name": la_name,  # cleaned 
+#         "LA_ref": la_ref,
+#         "Score_%": score if score else "N/A", # % being the only special char we leave/dont clean in headers
+#         "Overall Rating": overall_rating,
+#         "publication_date": publication_date,  
+#         "Report URL": report_url,
+#         **graded_outcomes
+#     }
+
+
+def correct_column_names(extracted_columns):
+    """
+    Correct known mis-extracted column names dynamically.
+
+    Args:
+        extracted_columns (list): List of column names extracted from a report.
+
+    Returns:
+        dict: A dictionary mapping incorrect column names to corrected ones (only for present columns).
+    """
+    fix_column_mappings = {
+        "Partners hips and services": "Partnerships and services",
+        "Outofcourt disposal policy and provision": "Out-of-court disposal policy and provision"
+    }
+    
+    return {col: fix_column_mappings[col] for col in extracted_columns if col in fix_column_mappings}
 
 
 def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
@@ -223,11 +286,11 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
     for i, line in enumerate(lines):
         line = re.sub(r"\s+", " ", line).strip()
 
-        # overall rating
+        # Extract overall rating
         if "Overall rating" in line:
             overall_rating = line.split("Overall rating")[-1].strip()
 
-        # numerical score as %
+        # Extract numerical score as %
         score_match = re.search(r"\b(\d+)/(\d+)\b", line)
         if score_match and score is None:
             try:
@@ -237,6 +300,7 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
             except ValueError:
                 print(f"⚠️ Error parsing score in: {line}")
 
+    # Cleaned graded outcomes extraction
     cleaned_lines = [re.sub(r"\s+", " ", line).strip() for line in lines if line.strip()]
 
     for line in cleaned_lines:
@@ -248,15 +312,28 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
             if grade.lower() in grading_outcomes:
                 graded_outcomes[category_name] = grade
 
-    return {
-        "LA_name": la_name,  # cleaned 
+    # correction(s) for known mis-extracted/typo column names
+    fix_column_mappings = {
+        "Partners hips and services": "Partnerships and services",
+        "Outofcourt disposal policy and provision": "Out-of-court disposal policy and provision"
+    }
+    corrected_outcomes = {fix_column_mappings.get(k, k): v for k, v in graded_outcomes.items()}
+
+    # # Debug - extracted col names
+    # print(f"Debug: Corrected Cols for {la_name}: {list(corrected_outcomes.keys())}")
+
+    record = {
+        "LA_name": la_name,  
         "LA_ref": la_ref,
         "Score_%": score if score else "N/A",
         "Overall Rating": overall_rating,
-        "publication_date": publication_date,  
+        "publication_date": publication_date,
         "Report URL": report_url,
-        **graded_outcomes
+        **corrected_outcomes  # outcome col headers
     }
+
+    return record
+
 
 
 
@@ -269,7 +346,7 @@ def scrape_inspections():
         la_name = clean_la_name(details["name"])  # cleaned
         publication_date = details.get("publication_date", "Unknown") 
 
-        print(f"\n📥 Processing: {la_name} ({details['year']}) \n-> {report_url}")
+        print(f"\nProcessing: {la_name} ({details['year']}) \n-> {report_url}")
 
         soup = get_soup(report_url)
         if not soup:
@@ -277,8 +354,9 @@ def scrape_inspections():
 
         # Find first valid PDF link (inspection reports always top/first)
         pdf_url = None
+
         for pdf_link in soup.find_all("a", href=True):
-            if "inspection" in normalise_text(pdf_link.text) and pdf_link["href"].endswith(".pdf"):
+            if "inspection" in " ".join(pdf_link.text.lower().split()) and pdf_link["href"].endswith(".pdf"):
                 pdf_url = pdf_link["href"]
                 break  
 
@@ -291,7 +369,7 @@ def scrape_inspections():
         if ratings_text != "Ratings page not found":
             parsed_data = parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date)  
             ratings_data.append(parsed_data)
-            print(f"✅ Data extracted for {la_name} - Published on {publication_date}")
+            print(f"Data extracted for {la_name} - Published on {publication_date}")
 
         time.sleep(2)  # Avoid request overload
 
@@ -402,6 +480,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
 
 structured_data_df = pd.DataFrame(scrape_inspections())
 
+print(f"Pre-cleaned headers: {structured_data_df.columns}") # debug
 
 # clean headers
 structured_data_df.columns = (
@@ -426,7 +505,7 @@ existing_cols = structured_data_df.columns.intersection([
     'implementation_and_delivery', 'reviewing',
     'out_of_court_disposal_policy_and_provision',
     'resettlement_policy_and_provision', 'policy_and_provision',
-    'joint_working', 'partnerships_and_services'
+    'joint_working'
 ])   
 if not existing_cols.empty:  # avoid dropping if no columns match
     structured_data_df.dropna(subset=existing_cols, how='all', inplace=True)
@@ -442,7 +521,7 @@ column_order = [
     'implementation_and_delivery', 'reviewing',
     'out_of_court_disposal_policy_and_provision',
     'resettlement_policy_and_provision', 'policy_and_provision',
-    'joint_working', 'partnerships_and_services'
+    'joint_working'
 ]
 
 
