@@ -24,7 +24,7 @@ def get_soup(url, max_attempts=2, delay=2):
             response.raise_for_status()
             return BeautifulSoup(response.content, "html.parser")
         except requests.RequestException as e:
-            print(f"Attempt {attempt} failed: {e}") # reached valid end of paginated results OR link failed
+            print(f"Attempt {attempt} failed: {e} - End of paginated results OR possible link failure.") # valid end of next page(s) OR failed
             if attempt < max_attempts:
                 time.sleep(delay)
             else:
@@ -452,6 +452,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
 
+    la_name_index = list(data_df.columns).index("la_name") + 1  # Convert to 1-based index
     report_url_index = list(data_df.columns).index("report_url") + 1  # Convert to 1-based index
 
 
@@ -493,6 +494,10 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
                 white-space: nowrap; /* Prevent wrapping */
                 overflow: hidden; /* Hide overflow */
                 text-overflow: ellipsis; /* Add "..." if needed */
+            }}
+            /* Set fixed width for la_name column */
+            td:nth-child({{la_name_index}}), th:nth-child({{la_name_index}}) {{
+                width: 150px; 
             }}
         </style>
 
@@ -546,7 +551,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
 
 structured_data_df = pd.DataFrame(scrape_inspections())
 
-print(f"Pre-cleaned headers: {structured_data_df.columns}") # debug
+# print(f"Pre-cleaned headers: {structured_data_df.columns}") # debug
 
 # clean headers
 structured_data_df.columns = (

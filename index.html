@@ -36,6 +36,10 @@
                 overflow: hidden; /* Hide overflow */
                 text-overflow: ellipsis; /* Add "..." if needed */
             }
+            /* Set fixed width for la_name column */
+            td:nth-child({la_name_index}), th:nth-child({la_name_index}) {
+                width: 150px; 
+            }
         </style>
 
     </head>
@@ -43,7 +47,7 @@
         <h1>HMI Probation Youth Justice Inspections Summary (Pre-Release)</h1>
         <p>Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>Read more about this tool/project <a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.</p>
         <p>Disclaimer:<br/>This summary is built from scraped data directly from <a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate. Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.</p>
-        <p><b>Summary last updated: 24 February 2025 19:16</b></p>
+        <p><b>Summary last updated: 24 February 2025 21:51</b></p>
         <div>
     <table border="1" class="dataframe">
   <thead>
