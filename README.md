@@ -1,6 +1,6 @@
 # hmi-probation-youth-justice-scrape  
 
-This repository contains a **scraper for HM Inspectorate of Probation Youth Justice inspection reports**, extracting structured data from published PDFs. The extracted data is compiled into a **summary dataset**, which is automatically updated and published as an HTML report.  
+This repository contains a **scraper for HM Inspectorate of Probation Youth Justice inspection reports**, extracting structured data from published PDFs. The extracted data is compiled into a **summary dataset**, which is automatically updated and published as an HTML report. Note: We are reviewing with colleagues atm regarding how best to potentially combine historic/mis-matched grading columns to improve the summary output usefulness and display without compromising the expected gradings. 
 
 ## 🚀 Features  
 

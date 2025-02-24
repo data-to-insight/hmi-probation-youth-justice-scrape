@@ -33,21 +33,29 @@ def get_soup(url, max_attempts=2, delay=2):
             
 def clean_la_name(raw_name):
     """Clean and standardise the local authority name."""
-    # Remove common prefix(es) ('justice' & 'offending', 'services' is optional)
+    # Remove standard prefixes ('youth justice' & 'offending', 'services' is optional)
     cleaned_name = re.sub(
         r"(?i)^An\s+inspection\s+of\s+youth\s+(justice|offending)\s+(services\s+)?in\s+", 
         "", 
         raw_name
     ).strip()
 
-    if re.match(r"(?i)^A\s+joint\s+inspection\s+of\s+", cleaned_name):
-        cleaned_name = re.sub(r"(?i)^A\s+joint\s+inspection\s+of\s+", "", cleaned_name).strip()
-        cleaned_name += " - Joint_Inspection" # leave indicator it was JYJI
+    # Handle "Joint Inspections" (move suffix placement after cleanup)
+    is_joint_inspection = re.match(r"(?i)^A\s+joint\s+inspection\s+of\s+", raw_name)
+    cleaned_name = re.sub(r"(?i)^A\s+joint\s+inspection\s+of\s+", "", cleaned_name).strip()
 
-    # for those where neither youth, offending, justice nor services appear in str
-    cleaned_name = re.sub(r"(?i)^An\s+inspection\s+of\s+", "", cleaned_name).strip()
+    # SECOND CLEANUP: Remove lingering "youth justice services in" or "youth offending services in"
+    cleaned_name = re.sub(
+        r"(?i)^youth\s+(justice|offending)\s+services\s+in\s+", 
+        "", 
+        cleaned_name
+    ).strip()
 
-    # named fixes
+    # Add "- Joint_Inspection" suffix **only if it was a joint inspection**
+    if is_joint_inspection:
+        cleaned_name += " - JI" # Joint inspection
+
+    # fixes for specific known issues
     fix_mappings = {
         "cumberlan d": "Cumberland",
         "southend -on-sea": "Southend-on-Sea",
@@ -60,6 +68,7 @@ def clean_la_name(raw_name):
     cleaned_name = fix_mappings.get(cleaned_name_lower, cleaned_name)
 
     return cleaned_name
+
 
 def scrape_inspection_links(start_year=None, end_year=2018):
     """Scrape all inspection links for each year, ensuring no duplicates."""
@@ -477,8 +486,12 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
                 font-size: 9pt;  
                 max-width: 150px; 
             }}
-            td {{
-                white-space: normal; /* table data also wraps */
+            /* Exclude 'report_url' column from fixed layout */
+            td:nth-child({{report_url_index}}), th:nth-child({{report_url_index}}) {{
+                width: auto !important; /* Allow flexible width */
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden; /* Hide overflow */
+                text-overflow: ellipsis; /* Add "..." if needed */
             }}
         </style>
 
