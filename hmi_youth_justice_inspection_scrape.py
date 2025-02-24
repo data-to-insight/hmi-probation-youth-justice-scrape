@@ -108,7 +108,10 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                                     raw_date = date_dd.text.strip()
                                     try:
                                         # Convert to DD/MM/YYYY format
-                                        formatted_date = datetime.strptime(raw_date, "%d %B %Y").strftime("%d/%m/%Y")
+                                        # formatted_date = datetime.strptime(raw_date, "%d %B %Y").strftime("%d/%m/%Y")
+                                        # Convert to DD/MM/YY format(testing for compact html view)
+                                        formatted_date = datetime.strptime(raw_date, "%d %B %Y").strftime("%d/%m/%y") 
+
                                         publication_date = formatted_date
                                     except ValueError:
                                         print(f"⚠️ Failed to parse date for {la_name}: {raw_date}")
@@ -119,7 +122,7 @@ def scrape_inspection_links(start_year=None, end_year=2018):
                             "url": report_url,
                             "name": la_name,
                             "year": year,
-                            "publication_date": publication_date  # New field added
+                            "publication_date": publication_date  
                         }
                         print(f"Added: {la_name} ({year}) - Published on {publication_date}")
                     else:
@@ -423,7 +426,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
 
     # web links to clickable HTML hyperlinks
     if web_link_column in data_df.columns:
-        base_url_to_remove = "https://www.justiceinspectorates.gov.uk/hmiprobation/"
+        base_url_to_remove = "https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/"
         data_df[web_link_column] = data_df[web_link_column].apply(
             lambda x: f'<a href="{x}">{x.replace(base_url_to_remove, "")}</a>' 
             if isinstance(x, str) and x.startswith("http") else x
