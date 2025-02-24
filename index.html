@@ -12,7 +12,7 @@
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
-                table-layout: fixed; /* even space cols */
+                table-layout: auto; /* Dynamically size based on content */
             }
             table, th, td {
                 border: 1px solid #ddd;
@@ -23,31 +23,38 @@
             }
             th {
                 background-color: #f2f2f2;
-                white-space: normal;  /* multi-line wrapping */
-                word-wrap: break-word; /* words break */
-                overflow-wrap: break-word; /* wider browser support */
+                white-space: normal;  /* Allow wrapping */
+                word-wrap: break-word; /* Words break */
+                overflow-wrap: break-word; /* Wider browser support */
                 font-size: 9pt;  
                 max-width: 150px; 
             }
-            /* Exclude 'report_url' column from fixed layout */
-            td:nth-child({report_url_index}), th:nth-child({report_url_index}) {
-                width: auto !important; /* Allow flexible width */
-                white-space: nowrap; /* Prevent wrapping */
+            /* Allow flexible width for 'report_url' and prevent wrapping */
+            td:nth-child(5), th:nth-child(5) {
+                white-space: nowrap; /* Prevent text wrapping */
                 overflow: hidden; /* Hide overflow */
                 text-overflow: ellipsis; /* Add "..." if needed */
+                max-width: 300px; /* Set reasonable limit */
             }
-            /* Set fixed width for la_name column */
-            td:nth-child({la_name_index}), th:nth-child({la_name_index}) {
-                width: 150px; 
+            /* Ensure 'overall_rating' adapts but can wrap */
+            td:nth-child(3), th:nth-child(3) {
+                white-space: normal; /* Allow text wrapping */
+                word-wrap: break-word;
+                max-width: 120px; /* Adjust width as needed */
+            }
+            /* Set fixed width for 'la_name' column */
+            td:nth-child(1), th:nth-child(1) {
+                width: 170px; 
             }
         </style>
+
 
     </head>
     <body>
         <h1>HMI Probation Youth Justice Inspections Summary (Pre-Release)</h1>
-        <p>Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>Read more about this tool/project <a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.</p>
+        <p>Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>Outcome gradings are temporarily replaced for readability with the following: "outstanding": 1, "good": 2, "requires improvement": 3, "inadequate": 4 <br/>It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>Read more about this tool/project <a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.</p>
         <p>Disclaimer:<br/>This summary is built from scraped data directly from <a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate. Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.</p>
-        <p><b>Summary last updated: 24 February 2025 21:51</b></p>
+        <p><b>Summary last updated: 24 February 2025 23:40</b></p>
         <div>
     <table border="1" class="dataframe">
   <thead>
@@ -55,131 +62,131 @@
       <th>la_name</th>
       <th>score_%</th>
       <th>overall_rating</th>
-      <th>publication_date</th>
+      <th>publication</th>
       <th>report_url</th>
       <th>staff</th>
-      <th>partnerships_and_services</th>
-      <th>information_and_facilities</th>
+      <th>partners_and_services</th>
+      <th>info_and_facilities</th>
       <th>assessment</th>
       <th>planning</th>
       <th>reviewing</th>
-      <th>implementation_and_delivery</th>
-      <th>resettlement_policy_and_provision</th>
-      <th>governance_and_leadership</th>
-      <th>outofcourt_disposal_policy_and_provision</th>
+      <th>impl_and_delivery</th>
+      <th>resettle_policy_provision</th>
+      <th>govern_and_leader</th>
+      <th>oocourt_policy_provision</th>
       <th>policy_and_provision</th>
       <th>joint_working</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Newcastle</td>
+      <td>newcastle</td>
       <td>44.44</td>
       <td>Requires Improvement</td>
       <td>18/02/25</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/newcastleyjs2025/">newcastleyjs2025/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bath and North East Somerset</td>
+      <td>bath and north east somerset</td>
       <td>72.22</td>
       <td>Good</td>
       <td>04/02/25</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bnesyjs2025/">bnesyjs2025/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Norfolk</td>
+      <td>norfolk</td>
       <td>61.11</td>
       <td>Good</td>
       <td>28/01/25</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/nyjs2025/">nyjs2025/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Slough</td>
+      <td>slough</td>
       <td>8.33</td>
       <td>Inadequate</td>
       <td>14/01/25</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/sloughyjs2025/">sloughyjs2025/</a></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bromley</td>
+      <td>bromley</td>
       <td>91.67</td>
       <td>Outstanding</td>
       <td>07/01/25</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bromleyyjs2025/">bromleyyjs2025/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Reading</td>
+      <td>reading</td>
       <td>13.89</td>
       <td>Inadequate</td>
       <td>03/12/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/readingyjs2024/">readingyjs2024/</a></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -187,37 +194,37 @@
       <td></td>
     </tr>
     <tr>
-      <td>Ceredigion</td>
+      <td>ceredigion</td>
       <td>4.17</td>
       <td>Inadequate</td>
       <td>12/11/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/ceredigionyjs2024/">ceredigionyjs2024/</a></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Cumberland</td>
+      <td>cumberland</td>
       <td>33.33</td>
       <td>Requires Improvement</td>
       <td>29/10/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/cumberlandyjs2024/">cumberlandyjs2024/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -225,17 +232,17 @@
       <td></td>
     </tr>
     <tr>
-      <td>Southend-on-Sea</td>
+      <td>southend-on-sea</td>
       <td>44.44</td>
       <td>Requires Improvement</td>
       <td>24/09/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/southendyjs2024/">southendyjs2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -244,37 +251,37 @@
       <td></td>
     </tr>
     <tr>
-      <td>Wokingham</td>
+      <td>wokingham</td>
       <td>75.00</td>
       <td>Good</td>
       <td>17/09/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wyjs2024/">wyjs2024/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Lewisham</td>
+      <td>lewisham</td>
       <td>61.11</td>
       <td>Good</td>
       <td>17/09/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/lyjs2024/">lyjs2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -282,170 +289,170 @@
       <td></td>
     </tr>
     <tr>
-      <td>East Sussex</td>
+      <td>east sussex</td>
       <td>69.44</td>
       <td>Good</td>
       <td>17/09/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/esyjs2024/">esyjs2024/</a></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Westminster</td>
+      <td>westminster</td>
       <td>80.56</td>
       <td>Good</td>
       <td>17/09/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/westminster2024/">westminster2024/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Islington</td>
+      <td>islington</td>
       <td>94.44</td>
       <td>Outstanding</td>
       <td>20/08/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/iyjs2024/">iyjs2024/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Doncaster</td>
+      <td>doncaster</td>
       <td>44.44</td>
       <td>Requires Improvement</td>
       <td>12/07/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/doncaster2024/">doncaster2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bexley</td>
+      <td>bexley</td>
       <td>75.00</td>
       <td>Good</td>
       <td>12/07/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bexley2024/">bexley2024/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Flintshire</td>
+      <td>flintshire</td>
       <td>55.56</td>
       <td>Good</td>
       <td>11/07/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/flintshire2024/">flintshire2024/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Newport</td>
+      <td>newport</td>
       <td>52.78</td>
       <td>Good</td>
       <td>11/07/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/newport2024/">newport2024/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Wiltshire</td>
+      <td>wiltshire</td>
       <td>55.56</td>
       <td>Good</td>
       <td>14/05/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wiltshire2024/">wiltshire2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Redbridge</td>
+      <td>redbridge</td>
       <td>30.56</td>
       <td>Requires Improvement</td>
       <td>10/05/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/redbridge2024/">redbridge2024/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -453,26 +460,26 @@
       <td></td>
     </tr>
     <tr>
-      <td>Salford</td>
+      <td>salford</td>
       <td>61.11</td>
       <td>Good</td>
       <td>09/05/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/salford2024/">salford2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Waltham Forest</td>
+      <td>waltham forest</td>
       <td>30.56</td>
       <td>Requires Improvement</td>
       <td>08/05/24</td>
@@ -480,10 +487,10 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -491,56 +498,56 @@
       <td></td>
     </tr>
     <tr>
-      <td>Conwy & Denbighshire - JI</td>
+      <td>conwy & denbighshire - ji</td>
       <td>36.11</td>
       <td>Requires Improvement</td>
       <td>08/05/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/cd2024/">cd2024/</a></td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Carmarthenshire</td>
+      <td>carmarthenshire</td>
       <td>94.44</td>
       <td>Outstanding</td>
       <td>19/03/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/carmarthenshire2024/">carmarthenshire2024/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bracknell Forest</td>
+      <td>bracknell forest</td>
       <td>77.78</td>
       <td>Good</td>
       <td>05/03/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bf2024/">bf2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
@@ -548,56 +555,56 @@
       <td></td>
     </tr>
     <tr>
-      <td>Enfield</td>
+      <td>enfield</td>
       <td>58.33</td>
       <td>Good</td>
       <td>27/02/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/enfield2024/">enfield2024/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Nottinghamshire - JI</td>
+      <td>nottinghamshire - ji</td>
       <td>52.78</td>
       <td>Good</td>
       <td>23/01/24</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/nottinghamshire2024/">nottinghamshire2024/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Staffordshire</td>
+      <td>staffordshire</td>
       <td>25.00</td>
       <td>Requires Improvement</td>
       <td>19/12/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/staffordshire2023/">staffordshire2023/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -605,18 +612,18 @@
       <td></td>
     </tr>
     <tr>
-      <td>Solihull</td>
+      <td>solihull</td>
       <td>47.22</td>
       <td>Requires Improvement</td>
       <td>19/12/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/solihull2023/">solihull2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -624,216 +631,216 @@
       <td></td>
     </tr>
     <tr>
-      <td>Isle of Wight</td>
+      <td>isle of wight</td>
       <td>41.67</td>
       <td>Requires Improvement</td>
       <td>14/11/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/iowy2023/">iowy2023/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Cambridgeshire</td>
+      <td>cambridgeshire</td>
       <td>52.78</td>
       <td>Good</td>
       <td>31/10/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/cambsyos2023/">cambsyos2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Southwark</td>
+      <td>southwark</td>
       <td>80.56</td>
       <td>Good</td>
       <td>17/10/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/southwark2023/">southwark2023/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Northamptonshire</td>
+      <td>northamptonshire</td>
       <td>66.67</td>
       <td>Good</td>
       <td>13/10/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/northamptonshireyos2023/">northamptonshireyos2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Ealing</td>
+      <td>ealing</td>
       <td>47.22</td>
       <td>Requires Improvement</td>
       <td>26/09/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/ealingyos2023/">ealingyos2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>North Lincolnshire</td>
+      <td>north lincolnshire</td>
       <td>58.33</td>
       <td>Good</td>
       <td>05/09/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/nly2023/">nly2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Barnsley</td>
+      <td>barnsley</td>
       <td>52.78</td>
       <td>Good</td>
       <td>19/07/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/barnsleyyos2023/">barnsleyyos2023/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4</td>
+      <td>1</td>
+      <td>4</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Royal Borough of Greenwich</td>
+      <td>royal borough of greenwich</td>
       <td>63.89</td>
       <td>Good</td>
       <td>20/06/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/greenwichyos2023/">greenwichyos2023/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Gateshead</td>
+      <td>gateshead</td>
       <td>72.22</td>
       <td>Good</td>
       <td>23/05/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/gateshead2023/">gateshead2023/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Knowsley</td>
+      <td>knowsley</td>
       <td>80.56</td>
       <td>Good</td>
       <td>11/05/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/knowsley2023/">knowsley2023/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Hackney - JI</td>
+      <td>hackney - ji</td>
       <td>69.44</td>
       <td>Good</td>
       <td>10/05/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/hackneyyos2023/">hackneyyos2023/</a></td>
-      <td>Outstanding</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Birmingham</td>
+      <td>birmingham</td>
       <td>30.56</td>
       <td>Requires Improvement</td>
       <td>21/03/23</td>
@@ -842,9 +849,9 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -852,284 +859,284 @@
       <td></td>
     </tr>
     <tr>
-      <td>Coventry</td>
+      <td>coventry</td>
       <td>88.89</td>
       <td>Outstanding</td>
       <td>21/02/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/coventryyos/">coventryyos/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>St Helens</td>
+      <td>st helens</td>
       <td>80.56</td>
       <td>Good</td>
       <td>21/02/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/sthyos/">sthyos/</a></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Swindon</td>
+      <td>swindon</td>
       <td>86.11</td>
       <td>Outstanding</td>
       <td>24/01/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/swindonyos/">swindonyos/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Suffolk - JI</td>
+      <td>suffolk - ji</td>
       <td>25.00</td>
       <td>Requires Improvement</td>
       <td>18/01/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/suffolkyos/">suffolkyos/</a></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Good</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Dorset - JI</td>
+      <td>dorset - ji</td>
       <td>66.67</td>
       <td>Good</td>
       <td>17/01/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/dorsetyos/">dorsetyos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Blackburn with Darwen</td>
+      <td>blackburn with darwen</td>
       <td>80.56</td>
       <td>Good</td>
       <td>17/01/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bdyos/">bdyos/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Buckinghamshire</td>
+      <td>buckinghamshire</td>
       <td>75.00</td>
       <td>Good</td>
       <td>10/01/23</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bucksyos/">bucksyos/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>York</td>
+      <td>york</td>
       <td>88.89</td>
       <td>Outstanding</td>
       <td>14/12/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/yorkyos/">yorkyos/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Devon</td>
+      <td>devon</td>
       <td>72.22</td>
       <td>Good</td>
       <td>22/11/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/devonyos/">devonyos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>County Durham</td>
+      <td>county durham</td>
       <td>30.56</td>
       <td>Requires Improvement</td>
       <td>03/11/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/countydurhamyos/">countydurhamyos/</a></td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
+      <td>4</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Havering</td>
+      <td>havering</td>
       <td>55.56</td>
       <td>Good</td>
       <td>01/11/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/haveringyos/">haveringyos/</a></td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Stockport</td>
+      <td>stockport</td>
       <td>50.00</td>
       <td>Requires Improvement</td>
       <td>01/11/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/stockport-yjs/">stockport-yjs/</a></td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Hammersmith and Fulham</td>
+      <td>hammersmith and fulham</td>
       <td>86.11</td>
       <td>Outstanding</td>
       <td>20/10/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/hammersmith-fulham-yot/">hammersmith-fulham-yot/</a></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Derbyshire</td>
+      <td>derbyshire</td>
       <td>66.67</td>
       <td>Good</td>
       <td>28/09/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/derbyshireyos/">derbyshireyos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Stoke-on-Trent</td>
+      <td>stoke-on-trent</td>
       <td>50.00</td>
       <td>Requires Improvement</td>
       <td>28/09/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/stoke-on-trent-yot/">stoke-on-trent-yot/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1137,56 +1144,56 @@
       <td></td>
     </tr>
     <tr>
-      <td>North East Lincolnshire</td>
+      <td>north east lincolnshire</td>
       <td>75.00</td>
       <td>Good</td>
       <td>27/09/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/north-east-lincolnshire-yos/">north-east-lincolnshire-yos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Blaenau Gwent and Caerphilly</td>
+      <td>blaenau gwent and caerphilly</td>
       <td>77.78</td>
       <td>Good</td>
       <td>22/09/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/blaenau-gwent-and-caerphilly-yot/">blaenau-gwent-and-caerphilly-yot/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Sutton</td>
+      <td>sutton</td>
       <td>50.00</td>
       <td>Requires Improvement</td>
       <td>06/09/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/sutton-yjs/">sutton-yjs/</a></td>
-      <td>Outstanding</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1194,129 +1201,129 @@
       <td></td>
     </tr>
     <tr>
-      <td>Thurrock</td>
+      <td>thurrock</td>
       <td>72.22</td>
       <td>Good</td>
       <td>23/08/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/thurrockyos/">thurrockyos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Vale of Glamorgan</td>
+      <td>vale of glamorgan</td>
       <td>61.11</td>
       <td>Good</td>
       <td>16/08/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/vale-of-glamorgan-yos/">vale-of-glamorgan-yos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>An inspection of Tower Hamlets and City of London</td>
+      <td>an inspection of tower hamlets and city of london</td>
       <td>22.22</td>
       <td>Requires Improvement</td>
       <td>26/07/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/th-yjs/">th-yjs/</a></td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Good</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bolton</td>
+      <td>bolton</td>
       <td>80.56</td>
       <td>Good</td>
       <td>06/07/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bolton-yjs/">bolton-yjs/</a></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>West Sussex</td>
+      <td>west sussex</td>
       <td>72.22</td>
       <td>Requires Improvement</td>
       <td>22/06/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/west-sussex-yjs/">west-sussex-yjs/</a></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Portsmouth</td>
+      <td>portsmouth</td>
       <td>61.11</td>
       <td>1 The resettlement standard does not contribute to the overall rating for the YOT.</td>
       <td>21/06/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/portsmouth-yot/">portsmouth-yot/</a></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Bridgend</td>
+      <td>bridgend</td>
       <td>4.56</td>
       <td>Requires Improvement</td>
       <td>14/06/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bridgend-jys/">bridgend-jys/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1327,26 +1334,26 @@
       <td></td>
     </tr>
     <tr>
-      <td>Barnet</td>
+      <td>barnet</td>
       <td>58.33</td>
       <td>Good</td>
       <td>31/05/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/barnet-yos/">barnet-yos/</a></td>
-      <td>Good</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>West Mercia</td>
+      <td>west mercia</td>
       <td>38.89</td>
       <td>Requires Improvement</td>
       <td>19/05/22</td>
@@ -1355,9 +1362,9 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1365,75 +1372,75 @@
       <td></td>
     </tr>
     <tr>
-      <td>Calderdale</td>
+      <td>calderdale</td>
       <td>50.00</td>
       <td>Requires Improvement</td>
       <td>17/05/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/calderdale-yjs/">calderdale-yjs/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Powys</td>
+      <td>powys</td>
       <td>52.78</td>
       <td>Good</td>
       <td>22/03/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/powys-yjs/">powys-yjs/</a></td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>4</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Surrey</td>
+      <td>surrey</td>
       <td>75.00</td>
       <td>Good</td>
       <td>15/03/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/surrey-yos/">surrey-yos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Swansea</td>
+      <td>swansea</td>
       <td>38.89</td>
       <td>Requires Improvement</td>
       <td>15/02/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/swansea-yjs/">swansea-yjs/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1441,73 +1448,73 @@
       <td></td>
     </tr>
     <tr>
-      <td>Wolverhampton</td>
+      <td>wolverhampton</td>
       <td>77.78</td>
       <td>Good</td>
       <td>08/02/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wolverhampton-yot/">wolverhampton-yot/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Plymouth</td>
+      <td>plymouth</td>
       <td>66.67</td>
       <td>Good</td>
       <td>04/02/22</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/plymouth-yjs/">plymouth-yjs/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
     </tr>
     <tr>
-      <td>Wakefield</td>
+      <td>wakefield</td>
       <td>27.78</td>
       <td>Requires Improvement</td>
       <td>17/12/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wakefield-yjs/">wakefield-yjs/</a></td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
     </tr>
     <tr>
-      <td>Harrow</td>
+      <td>harrow</td>
       <td>47.22</td>
       <td>Requires Improvement</td>
       <td>10/12/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/harrowyjs/">harrowyjs/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
@@ -1517,64 +1524,64 @@
       <td></td>
     </tr>
     <tr>
-      <td>Bedfordshire</td>
+      <td>bedfordshire</td>
       <td>38.89</td>
       <td>Requires Improvement</td>
       <td>09/12/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bedfordshire-yos/">bedfordshire-yos/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
       <td></td>
       <td></td>
-      <td>Good</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>2</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Leicestershire</td>
+      <td>leicestershire</td>
       <td>30.56</td>
       <td>Requires Improvement</td>
       <td>02/12/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/leicestershire-yjs/">leicestershire-yjs/</a></td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Good</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Wirral</td>
+      <td>wirral</td>
       <td>63.89</td>
       <td>Good</td>
       <td>26/10/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wirral-yjs/">wirral-yjs/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Good</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>Kirklees</td>
+      <td>kirklees</td>
       <td>22.22</td>
       <td>Requires Improvement</td>
       <td>12/10/21</td>
@@ -1583,71 +1590,71 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
-      <td>Inadequate</td>
+      <td>4</td>
     </tr>
     <tr>
-      <td>Kent</td>
+      <td>kent</td>
       <td>50.00</td>
       <td>Requires Improvement</td>
       <td>05/10/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/kent-yjs/">kent-yjs/</a></td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Inadequate</td>
-      <td>Inadequate</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+      <td>4</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
       <td></td>
-      <td>Good</td>
+      <td>2</td>
     </tr>
     <tr>
-      <td>Hull</td>
+      <td>hull</td>
       <td>80.56</td>
       <td>Good</td>
       <td>16/09/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/hull-yos/">hull-yos/</a></td>
-      <td>Good</td>
+      <td>2</td>
       <td></td>
-      <td>Outstanding</td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td></td>
-      <td></td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
       <td></td>
-      <td>Outstanding</td>
+      <td></td>
+      <td></td>
+      <td>1</td>
     </tr>
     <tr>
-      <td>Kensington and Chelsea</td>
+      <td>kensington and chelsea</td>
       <td>80.56</td>
       <td>Good</td>
       <td>09/03/21</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/rbkc-yos/">rbkc-yos/</a></td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Good</td>
-      <td>Outstanding</td>
-      <td>Outstanding</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
       <td></td>
-      <td>Outstanding</td>
+      <td>1</td>
       <td></td>
       <td></td>
-      <td>Outstanding</td>
+      <td>1</td>
     </tr>
   </tbody>
 </table>

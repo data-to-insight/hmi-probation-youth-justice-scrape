@@ -9,6 +9,12 @@ import pandas as pd
 import PyPDF2
 import io  # handling PDF byte stream
 
+# limiters just to avoid full scrape hits during testing/debug
+DEBUG_MODE = False  # False for full scrape
+DEBUG_YEAR_LIMIT = 2024  # scrape single yr
+
+
+
 
 pd.set_option('future.no_silent_downcasting', True) # explicitly opt-in to future pd behaviour (fillna()|ffill(),..)
 
@@ -76,6 +82,11 @@ def scrape_inspection_links(start_year=None, end_year=2018):
     
     if start_year is None:
         start_year = datetime.now().year  # Default to current year
+
+    if DEBUG_MODE:
+        print(f"Debug Mode: Limiting scrape to year {DEBUG_YEAR_LIMIT}")
+        start_year = DEBUG_YEAR_LIMIT
+        end_year = DEBUG_YEAR_LIMIT
 
     for year in range(start_year, end_year - 1, -1):
         page = 0
@@ -347,15 +358,23 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
     # print(f"Debug: {la_name} - Fixed Overall Rating: {overall_rating}")
 
     record = {
-        "LA_name": la_name,  
-        "LA_ref": la_ref,
-        "Score_%": score if score else "N/A",
-        "Overall Rating": overall_rating,
+        "la_name": la_name,  
+        "la_ref": la_ref,
+        "score_%": score if score else "N/A",
+        "overall_rating": overall_rating,
         "publication_date": publication_date,
-        "Report URL": report_url,
+        "report_url": report_url,
         **corrected_outcomes  # outcome col headers
     }
-
+    # record = {
+    #     "LA_name": la_name,  
+    #     "LA_ref": la_ref,
+    #     "Score_%": score if score else "N/A",
+    #     "Overall Rating": overall_rating,
+    #     "publication_date": publication_date,
+    #     "Report URL": report_url,
+    #     **corrected_outcomes  # outcome col headers
+    # }
     return record
 
 
@@ -416,6 +435,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     intro_text = (
         'Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>'
         'The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>'
+        'Outcome gradings are temporarily replaced for readability with the following: "outstanding": 1, "good": 2, "requires improvement": 3, "inadequate": 4 <br/>'
         'It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>'
         'The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>'
         'Read more about this tool/project '
@@ -447,14 +467,42 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
 
     # Avoid NaN's being visible in the front-end/html table
     data_df = data_df.apply(lambda x: x.fillna("").infer_objects(copy=False) if x.dtype == "object" else x)
+    # tidy up string case just for the web
+    # data_df = data_df.apply(lambda x: x.astype(str).str.title() if x.dtype == "object" else x)
+    data_df["la_name"] = data_df["la_name"].astype(str).str.title()
 
+    # ratings/outcomes mapping
+    rating_mapping = {
+        "outstanding": 1,
+        "good": 2,
+        "requires improvement": 3,
+        "inadequate": 4
+    }
+    # apply outcomes mapping to all cols EXCEPT 'overall_rating' 
+    # doing this only to improve readability on html summary until we can reduce num of cols
+    columns_to_update = [col for col in data_df.columns if col != "overall_rating"]
+    data_df[columns_to_update] = data_df[columns_to_update].apply(lambda col: 
+        col.str.lower().replace(rating_mapping, regex=True) if col.dtype == "object" else col
+    )
+
+    # Col header abbr for HTML summary
+    column_abbreviation_mapping = {
+        "publication_date": "publication",
+        "implementation_and_delivery": "impl_and_delivery",
+        "governance_and_leadership": "govern_and_leader",
+        "partnerships_and_services": "partners_and_services",
+        "information_and_facilities": "info_and_facilities",
+        "outofcourt_disposal_policy_and_provision": "oocourt_policy_provision",
+        "resettlement_policy_and_provision": "resettle_policy_provision"
+    }
+    data_df = data_df.rename(columns=column_abbreviation_mapping)
 
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
 
-    la_name_index = list(data_df.columns).index("la_name") + 1  # Convert to 1-based index
-    report_url_index = list(data_df.columns).index("report_url") + 1  # Convert to 1-based index
-
+    la_name_index = list(data_df.columns).index("la_name") + 1              # Convert to 1-based index
+    report_url_index = list(data_df.columns).index("report_url") + 1        #
+    overall_rating_index = list(data_df.columns).index("overall_rating") + 1    #
 
     # generate HTML content
     html_content = f"""
@@ -471,7 +519,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
-                table-layout: fixed; /* even space cols */
+                table-layout: auto; /* size based on content */
             }}
             table, th, td {{
                 border: 1px solid #ddd;
@@ -482,24 +530,31 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
             }}
             th {{
                 background-color: #f2f2f2;
-                white-space: normal;  /* multi-line wrapping */
-                word-wrap: break-word; /* words break */
-                overflow-wrap: break-word; /* wider browser support */
+                white-space: normal;  /* Allow wrapping */
+                word-wrap: break-word; /* Words break */
+                overflow-wrap: break-word; /* Wider browser support */
                 font-size: 9pt;  
                 max-width: 150px; 
             }}
-            /* Exclude 'report_url' column from fixed layout */
-            td:nth-child({{report_url_index}}), th:nth-child({{report_url_index}}) {{
-                width: auto !important; /* Allow flexible width */
-                white-space: nowrap; /* Prevent wrapping */
+            /* Allow flexible width for 'report_url' and prevent wrapping */
+            td:nth-child({report_url_index}), th:nth-child({report_url_index}) {{
+                white-space: nowrap; /* Prevent text wrapping */
                 overflow: hidden; /* Hide overflow */
                 text-overflow: ellipsis; /* Add "..." if needed */
+                max-width: 300px; /* Set reasonable limit */
             }}
-            /* Set fixed width for la_name column */
-            td:nth-child({{la_name_index}}), th:nth-child({{la_name_index}}) {{
-                width: 150px; 
+            /* Ensure 'overall_rating' adapts but can wrap */
+            td:nth-child({overall_rating_index}), th:nth-child({overall_rating_index}) {{
+                white-space: normal; /* Allow text wrapping */
+                word-wrap: break-word;
+                max-width: 120px; 
+            }}
+            /* Set fixed width for 'la_name' column */
+            td:nth-child({la_name_index}), th:nth-child({la_name_index}) {{
+                width: 170px; 
             }}
         </style>
+
 
     </head>
     <body>
