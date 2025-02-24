@@ -12,6 +12,7 @@
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
+                table-layout: fixed; /* even space cols */
             }
             table, th, td {
                 border: 1px solid #ddd;
@@ -22,14 +23,23 @@
             }
             th {
                 background-color: #f2f2f2;
+                white-space: normal;  /* multi-line wrapping */
+                word-wrap: break-word; /* words break */
+                overflow-wrap: break-word; /* wider browser support */
+                font-size: 9pt;  
+                max-width: 150px; 
+            }
+            td {
+                white-space: normal; /* table data also wraps */
             }
         </style>
+
     </head>
     <body>
         <h1>HMI Probation Youth Justice Inspections Summary (Pre-Release)</h1>
         <p>Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>Read more about this tool/project <a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.</p>
         <p>Disclaimer:<br/>This summary is built from scraped data directly from <a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate. Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.</p>
-        <p><b>Summary last updated: 24 February 2025 12:52</b></p>
+        <p><b>Summary last updated: 24 February 2025 17:57</b></p>
         <div>
     <table border="1" class="dataframe">
   <thead>
@@ -57,7 +67,7 @@
     <tr>
       <td>Newcastle</td>
       <td>44.44</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>18/02/2025</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/newcastleyjs2025/">inspections/newcastleyjs2025/</a></td>
       <td>Good</td>
@@ -114,7 +124,7 @@
     <tr>
       <td>Slough</td>
       <td>8.33</td>
-      <td>Inadeq uate</td>
+      <td>Inadequate</td>
       <td>14/01/2025</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/sloughyjs2025/">inspections/sloughyjs2025/</a></td>
       <td>Inadequate</td>
@@ -190,7 +200,7 @@
     <tr>
       <td>Cumberland</td>
       <td>33.33</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>29/10/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/cumberlandyjs2024/">inspections/cumberlandyjs2024/</a></td>
       <td>Good</td>
@@ -209,7 +219,7 @@
     <tr>
       <td>Southend-on-Sea</td>
       <td>44.44</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>24/09/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/southendyjs2024/">inspections/southendyjs2024/</a></td>
       <td>Good</td>
@@ -323,7 +333,7 @@
     <tr>
       <td>Doncaster</td>
       <td>44.44</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>12/07/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/doncaster2024/">inspections/doncaster2024/</a></td>
       <td>Good</td>
@@ -418,7 +428,7 @@
     <tr>
       <td>Redbridge</td>
       <td>30.56</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>10/05/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/redbridge2024/">inspections/redbridge2024/</a></td>
       <td>Good</td>
@@ -456,7 +466,7 @@
     <tr>
       <td>Waltham Forest</td>
       <td>30.56</td>
-      <td>Requires i mprovement</td>
+      <td>Requires Improvement</td>
       <td>08/05/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wf2024/">inspections/wf2024/</a></td>
       <td></td>
@@ -475,7 +485,7 @@
     <tr>
       <td>youth justice services in Conwy & Denbighshire - Joint_Inspection</td>
       <td>36.11</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>08/05/2024</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/cd2024/">inspections/cd2024/</a></td>
       <td></td>
@@ -570,7 +580,7 @@
     <tr>
       <td>Staffordshire</td>
       <td>25.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>19/12/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/staffordshire2023/">inspections/staffordshire2023/</a></td>
       <td>Good</td>
@@ -589,7 +599,7 @@
     <tr>
       <td>Solihull</td>
       <td>47.22</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>19/12/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/solihull2023/">inspections/solihull2023/</a></td>
       <td>Good</td>
@@ -608,7 +618,7 @@
     <tr>
       <td>Isle of Wight</td>
       <td>41.67</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>14/11/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/iowy2023/">inspections/iowy2023/</a></td>
       <td>Good</td>
@@ -684,7 +694,7 @@
     <tr>
       <td>Ealing</td>
       <td>47.22</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>26/09/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/ealingyos2023/">inspections/ealingyos2023/</a></td>
       <td>Good</td>
@@ -817,7 +827,7 @@
     <tr>
       <td>Birmingham</td>
       <td>30.56</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>21/03/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/birminghamyos2023/">inspections/birminghamyos2023/</a></td>
       <td></td>
@@ -893,7 +903,7 @@
     <tr>
       <td>youth offending services in Suffolk - Joint_Inspection</td>
       <td>25.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>18/01/2023</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/suffolkyos/">inspections/suffolkyos/</a></td>
       <td></td>
@@ -1007,7 +1017,7 @@
     <tr>
       <td>County Durham</td>
       <td>30.56</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>03/11/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/countydurhamyos/">inspections/countydurhamyos/</a></td>
       <td></td>
@@ -1045,7 +1055,7 @@
     <tr>
       <td>Stockport</td>
       <td>50.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>01/11/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/stockport-yjs/">inspections/stockport-yjs/</a></td>
       <td></td>
@@ -1102,7 +1112,7 @@
     <tr>
       <td>Stoke-on-Trent</td>
       <td>50.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>28/09/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/stoke-on-trent-yot/">inspections/stoke-on-trent-yot/</a></td>
       <td>Good</td>
@@ -1159,7 +1169,7 @@
     <tr>
       <td>Sutton</td>
       <td>50.00</td>
-      <td>Requires i mprovement</td>
+      <td>Requires Improvement</td>
       <td>06/09/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/sutton-yjs/">inspections/sutton-yjs/</a></td>
       <td>Outstanding</td>
@@ -1216,7 +1226,7 @@
     <tr>
       <td>Tower Hamlets and City of London</td>
       <td>22.22</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>26/07/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/th-yjs/">inspections/th-yjs/</a></td>
       <td></td>
@@ -1254,7 +1264,7 @@
     <tr>
       <td>West Sussex</td>
       <td>72.22</td>
-      <td>Rating</td>
+      <td>Requires Improvement</td>
       <td>22/06/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/west-sussex-yjs/">inspections/west-sussex-yjs/</a></td>
       <td>Outstanding</td>
@@ -1273,7 +1283,7 @@
     <tr>
       <td>Portsmouth</td>
       <td>61.11</td>
-      <td>Good</td>
+      <td>1 The resettlement standard does not contribute to the overall rating for the YOT.</td>
       <td>21/06/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/portsmouth-yot/">inspections/portsmouth-yot/</a></td>
       <td>Good</td>
@@ -1292,7 +1302,7 @@
     <tr>
       <td>Bridgend</td>
       <td>4.56</td>
-      <td>Requires i mprovement</td>
+      <td>Requires Improvement</td>
       <td>14/06/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bridgend-jys/">inspections/bridgend-jys/</a></td>
       <td>Good</td>
@@ -1330,7 +1340,7 @@
     <tr>
       <td>West Mercia</td>
       <td>38.89</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>19/05/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/west-mercia-yjs/">inspections/west-mercia-yjs/</a></td>
       <td></td>
@@ -1349,7 +1359,7 @@
     <tr>
       <td>Calderdale</td>
       <td>50.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>17/05/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/calderdale-yjs/">inspections/calderdale-yjs/</a></td>
       <td>Good</td>
@@ -1406,7 +1416,7 @@
     <tr>
       <td>Swansea</td>
       <td>38.89</td>
-      <td>Requires i mprovement</td>
+      <td>Requires Improvement</td>
       <td>15/02/2022</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/swansea-yjs/">inspections/swansea-yjs/</a></td>
       <td>Good</td>
@@ -1463,7 +1473,7 @@
     <tr>
       <td>Wakefield</td>
       <td>27.78</td>
-      <td>Requires i mprov ement</td>
+      <td>Requires Improvement</td>
       <td>17/12/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/wakefield-yjs/">inspections/wakefield-yjs/</a></td>
       <td></td>
@@ -1482,7 +1492,7 @@
     <tr>
       <td>Harrow</td>
       <td>47.22</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>10/12/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/harrowyjs/">inspections/harrowyjs/</a></td>
       <td>Good</td>
@@ -1501,7 +1511,7 @@
     <tr>
       <td>Bedfordshire</td>
       <td>38.89</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>09/12/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/bedfordshire-yos/">inspections/bedfordshire-yos/</a></td>
       <td>Good</td>
@@ -1520,7 +1530,7 @@
     <tr>
       <td>Leicestershire</td>
       <td>30.56</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>02/12/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/leicestershire-yjs/">inspections/leicestershire-yjs/</a></td>
       <td>Good</td>
@@ -1558,7 +1568,7 @@
     <tr>
       <td>Kirklees</td>
       <td>22.22</td>
-      <td>Requires i mprovement</td>
+      <td>Requires Improvement</td>
       <td>12/10/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/kirklees-yjs/">inspections/kirklees-yjs/</a></td>
       <td></td>
@@ -1577,7 +1587,7 @@
     <tr>
       <td>Kent</td>
       <td>50.00</td>
-      <td>Requires improvement</td>
+      <td>Requires Improvement</td>
       <td>05/10/2021</td>
       <td><a href="https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/kent-yjs/">inspections/kent-yjs/</a></td>
       <td></td>

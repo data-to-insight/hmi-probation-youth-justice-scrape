@@ -10,20 +10,21 @@ import PyPDF2
 import io  # handling PDF byte stream
 
 
-pd.set_option('future.no_silent_downcasting', True)
+pd.set_option('future.no_silent_downcasting', True) # explicitly opt-in to future pd behaviour (fillna()|ffill(),..)
 
 # url paginated search (per year)
+# Other ways to achieve this exist, but this simplest|reliable in terms of access most recent for each LA
 base_url = "https://www.justiceinspectorates.gov.uk/hmiprobation/inspections?probation-inspection-type=inspection-of-youth-offending-services-2018-onwards"
 
 def get_soup(url, max_attempts=2, delay=2):
-    """Fetch a BeautifulSoup object from a URL with retries."""
+    """Fetch Soup object from URL (incl.retries)"""
     for attempt in range(1, max_attempts + 1):
         try:
             response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
             response.raise_for_status()
             return BeautifulSoup(response.content, "html.parser")
         except requests.RequestException as e:
-            print(f"Attempt {attempt} failed: {e}")
+            print(f"Attempt {attempt} failed: {e}") # reached valid end of paginated results OR link failed
             if attempt < max_attempts:
                 time.sleep(delay)
             else:
@@ -287,8 +288,19 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
         line = re.sub(r"\s+", " ", line).strip()
 
         # Extract overall rating
-        if "Overall rating" in line:
+        if "overall rating" in line.lower(): 
             overall_rating = line.split("Overall rating")[-1].strip()
+
+        # Fix grading outcome by init letter match (as cannot be sure where mis-placed spacing will be)
+        if overall_rating:
+            first_letter = overall_rating[0].upper()  # Get first char
+            grading_map = {
+                "R": "Requires Improvement",
+                "I": "Inadequate",
+                "G": "Good",
+                "O": "Outstanding"
+            }
+            overall_rating = grading_map.get(first_letter, overall_rating)  # Default original if no match
 
         # Extract numerical score as %
         score_match = re.search(r"\b(\d+)/(\d+)\b", line)
@@ -319,8 +331,8 @@ def parse_ratings(report_url, ratings_text, la_ref, la_name, publication_date):
     }
     corrected_outcomes = {fix_column_mappings.get(k, k): v for k, v in graded_outcomes.items()}
 
-    # # Debug - extracted col names
-    # print(f"Debug: Corrected Cols for {la_name}: {list(corrected_outcomes.keys())}")
+    # # Debug - corrected grading outcome
+    # print(f"Debug: {la_name} - Fixed Overall Rating: {overall_rating}")
 
     record = {
         "LA_name": la_name,  
@@ -428,6 +440,8 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
 
+
+
     # generate HTML content
     html_content = f"""
     <html>
@@ -443,6 +457,7 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
+                table-layout: fixed; /* even space cols */
             }}
             table, th, td {{
                 border: 1px solid #ddd;
@@ -453,8 +468,17 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
             }}
             th {{
                 background-color: #f2f2f2;
+                white-space: normal;  /* multi-line wrapping */
+                word-wrap: break-word; /* words break */
+                overflow-wrap: break-word; /* wider browser support */
+                font-size: 9pt;  
+                max-width: 150px; 
+            }}
+            td {{
+                white-space: normal; /* table data also wraps */
             }}
         </style>
+
     </head>
     <body>
         <h1>{page_title}</h1>
@@ -463,6 +487,31 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         <p><b>Summary last updated: {adjusted_timestamp_str}</b></p>
         <div>
     """
+
+## Style block if not wrapping data / e.g. if deciding to re-map|abbreviate headers
+        # <style>
+        #     body {{
+        #         font-family: Arial, sans-serif;
+        #         margin: 20px;
+        #         padding: 20px;
+        #     }}
+        #     table {{
+        #         width: 100%;
+        #         border-collapse: collapse;
+        #         font-size: 10pt;
+        #     }}
+        #     table, th, td {{
+        #         border: 1px solid #ddd;
+        #     }}
+        #     th, td {{
+        #         padding: 5px;
+        #         text-align: left;
+        #     }}
+        #     th {{
+        #         background-color: #f2f2f2;
+        #     }}
+        # </style>
+    
 
     # df to HTML table
     html_content += data_df.to_html(escape=False, index=False)
