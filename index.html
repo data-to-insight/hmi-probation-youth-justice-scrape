@@ -2,49 +2,88 @@
     <html>
     <head>
         <title>HMI Probation Youth Justice Inspections Summary (Pre-Release)</title>
+
         <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 20px;
                 padding: 20px;
             }
+            .table-container {
+                overflow-x: auto; /* Allows horizontal scrolling if needed */
+                max-width: 100%; /* Ensures table does not exceed the screen width */
+            }
             table {
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
-                table-layout: auto; /* Dynamically size based on content */
+                table-layout: fixed; /* Ensures consistent column widths */
             }
             table, th, td {
                 border: 1px solid #ddd;
             }
+            
+            /* 🔹 Default styling for table headers and data */
             th, td {
                 padding: 5px;
+                vertical-align: bottom; /* ⬇️ Ensures all text aligns to the bottom */
+            }
+
+            /* 🔹 Left-align ONLY the first 5 columns */
+            th:nth-child(-n+5), td:nth-child(-n+5) {
                 text-align: left;
             }
+
+            /* 🔹 Center-align ONLY columns 6+ (index 5 onwards) */
+            th:nth-child(n+6), td:nth-child(n+6) {
+                text-align: center;
+            }
+
+            /* 🔹 Header styling */
             th {
                 background-color: #f2f2f2;
+                font-size: 9pt;
+                height: 120px; /* Ensures enough space for vertical text */
                 white-space: normal;  /* Allow wrapping */
-                word-wrap: break-word; /* Words break */
-                overflow-wrap: break-word; /* Wider browser support */
-                font-size: 9pt;  
-                max-width: 150px; 
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                vertical-align: bottom; /* ⬇️ Ensures all headers are at the bottom edge */
             }
-            /* Allow flexible width for 'report_url' and prevent wrapping */
-            td:nth-child(5), th:nth-child(5) {
-                white-space: nowrap; /* Prevent text wrapping */
-                overflow: hidden; /* Hide overflow */
-                text-overflow: ellipsis; /* Add "..." if needed */
+
+            /* 🔹 Apply vertical rotation ONLY to headers AFTER the 5th column */
+            th:nth-child(n+6) {
+                writing-mode: vertical-rl;  /* Correct vertical text rotation */
+                transform: rotate(180deg);  /* Ensures text is upright */
+                vertical-align: bottom;
+                width: 60px; /* Ensures enough space for the text */
+                height: auto; /* Let height adjust naturally */
+                padding: 10px 5px; /* Add space at lower header edge */
+            }
+
+            /* 🔹 Set a fixed width for vertical header columns */
+            td:nth-child(n+6), th:nth-child(n+6) {
+                width: 60px; /* Match header width */
+                max-width: 60px;
+            }
+
+            /* 🔹 Allow flexible width for 'report_url' column */
+            td:nth-child({report_url_index}), th:nth-child({report_url_index}) {
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden;
+                text-overflow: ellipsis;
                 max-width: 300px; /* Set reasonable limit */
             }
-            /* Ensure 'overall_rating' adapts but can wrap */
-            td:nth-child(3), th:nth-child(3) {
+
+            /* 🔹 Ensure 'overall_rating' adapts but can wrap */
+            td:nth-child({overall_rating_index}), th:nth-child({overall_rating_index}) {
                 white-space: normal; /* Allow text wrapping */
                 word-wrap: break-word;
-                max-width: 120px; /* Adjust width as needed */
+                max-width: 120px;
             }
-            /* Set fixed width for 'la_name' column */
-            td:nth-child(1), th:nth-child(1) {
-                width: 170px; 
+
+            /* 🔹 Set fixed width for 'la_name' column */
+            td:nth-child({la_name_index}), th:nth-child({la_name_index}) {
+                width: 170px;
             }
         </style>
 
@@ -54,7 +93,7 @@
         <h1>HMI Probation Youth Justice Inspections Summary (Pre-Release)</h1>
         <p>Summarised outcomes of the most recent published HMI Youth Justice inspection reports by Local Authority.<br/>The summary and tool are in review/pre-release for feedback and towards suggested further development. <br/>Outcome gradings are temporarily replaced for readability with the following: "outstanding": 1, "good": 2, "requires improvement": 3, "inadequate": 4 <br/>It is not yet suitable for developing tools on top. E.g. We look to potentially merge some of the data columns and combine with other LA data/identifiers to increase the usefulness.<br/><br/>The below summary is available to <a href="hmi_youth_justice_inspection_ratings.csv">download here</a>; an expanded .xlsx version will replace this format.<br/>Read more about this tool/project <a href="https://github.com/data-to-insight/hmi-probation-youth-justice-scrape/blob/main/README.md">here</a>.</p>
         <p>Disclaimer:<br/>This summary is built from scraped data directly from <a href="https://www.justiceinspectorates.gov.uk/hmiprobation/">HMI Probation</a> published PDF inspection reports. <br/>Due to report formatting variations and PDF encoding nuances, some extractions may be incomplete or inaccurate. Colleague feedback or corrections are welcomed. <a href="mailto:datatoinsight.enquiries@gmail.com?subject=Youth-Justice-Scrape-Tool">Contact us</a>.</p>
-        <p><b>Summary last updated: 24 February 2025 23:40</b></p>
+        <p><b>Summary last updated: 25 February 2025 13:22</b></p>
         <div>
     <table border="1" class="dataframe">
   <thead>
@@ -62,18 +101,18 @@
       <th>la_name</th>
       <th>score_%</th>
       <th>overall_rating</th>
-      <th>publication</th>
+      <th>publication_date</th>
       <th>report_url</th>
       <th>staff</th>
-      <th>partners_and_services</th>
-      <th>info_and_facilities</th>
+      <th>partnerships_and_services</th>
+      <th>information_and_facilities</th>
       <th>assessment</th>
       <th>planning</th>
       <th>reviewing</th>
-      <th>impl_and_delivery</th>
-      <th>resettle_policy_provision</th>
-      <th>govern_and_leader</th>
-      <th>oocourt_policy_provision</th>
+      <th>implementation_and_delivery</th>
+      <th>resettlement_policy_and_provision</th>
+      <th>governance_and_leadership</th>
+      <th>outofcourt_disposal_policy_and_provision</th>
       <th>policy_and_provision</th>
       <th>joint_working</th>
     </tr>

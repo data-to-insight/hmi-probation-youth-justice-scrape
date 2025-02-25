@@ -11,7 +11,7 @@ import io  # handling PDF byte stream
 
 # limiters just to avoid full scrape hits during testing/debug
 DEBUG_MODE = False  # False for full scrape
-DEBUG_YEAR_LIMIT = 2024  # scrape single yr
+DEBUG_YEAR_LIMIT = 2025  # scrape single yr
 
 
 
@@ -485,17 +485,18 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         col.str.lower().replace(rating_mapping, regex=True) if col.dtype == "object" else col
     )
 
-    # Col header abbr for HTML summary
-    column_abbreviation_mapping = {
-        "publication_date": "publication",
-        "implementation_and_delivery": "impl_and_delivery",
-        "governance_and_leadership": "govern_and_leader",
-        "partnerships_and_services": "partners_and_services",
-        "information_and_facilities": "info_and_facilities",
-        "outofcourt_disposal_policy_and_provision": "oocourt_policy_provision",
-        "resettlement_policy_and_provision": "resettle_policy_provision"
-    }
-    data_df = data_df.rename(columns=column_abbreviation_mapping)
+    # # Switch on only if using horizontal headings
+    # # Col header abbr for HTML summary
+    # column_abbreviation_mapping = {
+    #     "publication_date": "publication",
+    #     "implementation_and_delivery": "impl_and_delivery",
+    #     "governance_and_leadership": "govern_and_leader",
+    #     "partnerships_and_services": "partners_and_services",
+    #     "information_and_facilities": "info_and_facilities",
+    #     "outofcourt_disposal_policy_and_provision": "oocourt_policy_provision",
+    #     "resettlement_policy_and_provision": "resettle_policy_provision"
+    # }
+    # data_df = data_df.rename(columns=column_abbreviation_mapping)
 
     # last updated visible page timestamp
     adjusted_timestamp_str = (datetime.now() + timedelta(hours=1)).strftime("%d %B %Y %H:%M")
@@ -509,49 +510,88 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
     <html>
     <head>
         <title>{page_title}</title>
+
         <style>
             body {{
                 font-family: Arial, sans-serif;
                 margin: 20px;
                 padding: 20px;
             }}
+            .table-container {{
+                overflow-x: auto; /* horiz scrolling if needed */
+                max-width: 100%; /* table does not exceed the screen width */
+            }}
             table {{
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 10pt;
-                table-layout: auto; /* size based on content */
+                table-layout: fixed; /* consistent column widths */
             }}
             table, th, td {{
                 border: 1px solid #ddd;
             }}
+            
+            /* table headers and data */
             th, td {{
                 padding: 5px;
+                vertical-align: bottom; /* text aligns to the bottom */
+            }}
+
+            /* ONLY the first 5 columns */
+            th:nth-child(-n+5), td:nth-child(-n+5) {{
                 text-align: left;
             }}
+
+            /* ONLY columns 6+ (index 5 onwards) */
+            th:nth-child(n+6), td:nth-child(n+6) {{
+                text-align: center;
+            }}
+
+            /*Header  */
             th {{
                 background-color: #f2f2f2;
+                font-size: 9pt;
+                height: 120px; /* space for vertical text */
                 white-space: normal;  /* Allow wrapping */
-                word-wrap: break-word; /* Words break */
-                overflow-wrap: break-word; /* Wider browser support */
-                font-size: 9pt;  
-                max-width: 150px; 
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                vertical-align: bottom; /* headers are at the bottom edge */
             }}
-            /* Allow flexible width for 'report_url' and prevent wrapping */
-            td:nth-child({report_url_index}), th:nth-child({report_url_index}) {{
-                white-space: nowrap; /* Prevent text wrapping */
-                overflow: hidden; /* Hide overflow */
-                text-overflow: ellipsis; /* Add "..." if needed */
+
+            /* vertical rotation ONLY to headers AFTER the 5th column */
+            th:nth-child(n+6) {{
+                writing-mode: vertical-rl;  /* vertical text rotation */
+                transform: rotate(180deg);  /* text is upright */
+                vertical-align: bottom;
+                width: 60px; /* space for the text */
+                height: auto; /* height adjust naturally */
+                padding: 10px 5px; /*bspace at lower header edge */
+            }}
+
+            /* fixed width for vertical header columns */
+            td:nth-child(n+6), th:nth-child(n+6) {{
+                width: 60px; /* Match header width */
+                max-width: 60px;
+            }}
+
+            /* flexible width for 'report_url' column */
+            td:nth-child({{report_url_index}}), th:nth-child({{report_url_index}}) {{
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden;
+                text-overflow: ellipsis;
                 max-width: 300px; /* Set reasonable limit */
             }}
-            /* Ensure 'overall_rating' adapts but can wrap */
-            td:nth-child({overall_rating_index}), th:nth-child({overall_rating_index}) {{
+
+            /* 'overall_rating' adapts but can wrap */
+            td:nth-child({{overall_rating_index}}), th:nth-child({{overall_rating_index}}) {{
                 white-space: normal; /* Allow text wrapping */
                 word-wrap: break-word;
-                max-width: 120px; 
+                max-width: 120px;
             }}
-            /* Set fixed width for 'la_name' column */
-            td:nth-child({la_name_index}), th:nth-child({la_name_index}) {{
-                width: 170px; 
+
+            /* fixed width for 'la_name' column */
+            td:nth-child({{la_name_index}}), th:nth-child({{la_name_index}}) {{
+                width: 170px;
             }}
         </style>
 
@@ -584,8 +624,15 @@ def save_to_html(data_df, column_order, web_link_column="report_url"):
         #         padding: 5px;
         #         text-align: left;
         #     }}
-        #     th {{
-        #         background-color: #f2f2f2;
+            # th {{
+            #     background-color: #f2f2f2;
+
+            #     white-space: normal;  /* Allow wrapping */
+            #     word-wrap: break-word; /* Words break */
+            #     overflow-wrap: break-word; /* Wider browser support */
+            #     font-size: 9pt;  
+            #     max-width: 150px; 
+            # }}
         #     }}
         # </style>
     
