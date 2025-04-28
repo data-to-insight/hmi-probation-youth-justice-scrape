@@ -1,0 +1,192 @@
+project:
+  name: hmi-probation-youth-justice-scrape
+  description: >
+    A Python tool that scrapes and processes Youth Justice inspection reports published by HM Inspectorate of Probation (HMIP),
+    extracting structured judgements and outcomes into a summary dataset for local authorities.
+
+sccm_alignment:
+  entities:
+    - name: HMInspectorateOfProbation
+      label: HM Inspectorate of Probation
+      description: National body responsible for inspecting Youth Justice Services across England and Wales
+      type: ORGANIZATION
+
+    - name: LocalAuthority
+      label: Local Authority
+      description: Administrative body responsible for delivering Youth Justice Services
+      type: ORGANIZATION
+      properties:
+        - la_code
+
+    - name: YouthJusticeService
+      label: Youth Justice Service
+      description: A service team within a Local Authority delivering youth offending and justice services
+      type: SERVICE
+
+    - name: ChildOrYoungPerson
+      label: Child/Young Person
+      description: Young people engaged with Youth Justice Services (subject of intervention or casework)
+      type: PERSON
+
+    - name: YouthJusticeInspectionEvent
+      label: Youth Justice Inspection Event
+      description: A specific inspection conducted by HMIP of a Youth Justice Service
+      type: EVENT
+      properties:
+        - start_date
+        - end_date
+        - published_date
+
+    - name: YouthJusticeObservation
+      label: Youth Justice Judgement
+      description: Judgement/outcome assigned during an inspection (e.g. "Good", "Requires Improvement")
+      type: OBSERVATION
+      properties:
+        - judgement_type
+        - judgement_grade
+
+    - name: InspectionSummary
+      label: Youth Justice Inspection Summary
+      description: Structured summary of inspection findings for a Local Authority’s Youth Justice Service
+      type: STATE
+
+    - name: CombinedYouthJusticeSummary
+      label: Youth Justice Combined Summary
+      description: A compiled dataset of all inspection summaries by Local Authority
+      type: COLLECTION
+      properties:
+        - generated_date
+        - version
+
+    - name: HMIPYouthJusticeScrapeTool
+      label: Youth Justice Scrape Tool
+      description: A Python tool that extracts, processes, and compiles HMIP Youth Justice inspection results
+      type: METHOD
+
+    - name: Place
+      label: Local Authority Area
+      description: The geographic area served by a Local Authority
+      type: PLACE
+
+    - name: Region
+      label: Region in England
+      description: A broader administrative or statistical geography grouping Local Authorities
+      type: PLACE
+
+  relationships:
+    - subject: LocalAuthority
+      predicate: is_located_in
+      object: Place
+
+    - subject: Place
+      predicate: is_part_of
+      object: Region
+
+    - subject: LocalAuthority
+      predicate: provides
+      object: YouthJusticeService
+
+    - subject: YouthJusticeService
+      predicate: serves
+      object: ChildOrYoungPerson
+
+    - subject: HMInspectorateOfProbation
+      predicate: performs
+      object: YouthJusticeInspectionEvent
+
+    - subject: YouthJusticeInspectionEvent
+      predicate: hasOutcome
+      object: InspectionSummary
+
+    - subject: InspectionSummary
+      predicate: stateOf
+      object: YouthJusticeService
+
+    - subject: YouthJusticeInspectionEvent
+      predicate: records
+      object: YouthJusticeObservation
+
+    - subject: HMIPYouthJusticeScrapeTool
+      predicate: extracts_from
+      object: InspectionSummary
+
+    - subject: HMIPYouthJusticeScrapeTool
+      predicate: produces
+      object: CombinedYouthJusticeSummary
+
+    - subject: LocalAuthority
+      predicate: learns_from
+      object: InspectionSummary
+
+    - subject: LocalAuthority
+      predicate: compares_with
+      object: LocalAuthority
+
+data_layers:
+  operational:
+    description: >
+      Periodic web scraping of HMIP website to extract inspection PDFs,
+      with automated parsing of inspection judgements into structured formats.
+    data_sources:
+      - name: HMIP Inspections Site
+        type: Web scrape (HTML + PDF parsing)
+        url: https://www.justiceinspectorates.gov.uk/hmiprobation/inspections/
+
+  statistical:
+    description: >
+      Aggregated statistics on Youth Justice Service inspection outcomes by Local Authority.
+    data_outputs:
+      - name: youth_justice_results_summary
+        format: CSV and Excel
+        location: ./hmi_youth_justice_summary.csv
+
+  analytical:
+    description: >
+      (Planned) Text mining and quality scoring of inspection reports to enhance benchmarking insights.
+    tools_used:
+      - pandas
+      - numpy
+      - BeautifulSoup
+      - PyPDF2 / tabula-py
+      - NLP (future enhancement)
+
+  political:
+    description: >
+      Used by Local Authorities, regional improvement alliances, and researchers to monitor,
+      benchmark, and support improvements in Youth Justice Services.
+
+external_influences:
+  stakeholders:
+    - name: HM Inspectorate of Probation
+      role: Source of official Youth Justice inspection reports
+
+    - name: Local Authorities
+      role: Providers of Youth Justice Services and subjects of inspection
+
+  organisations:
+    - name: Data to Insight (D2I)
+      role: Developer of the scraping tool and summarisation solution
+
+exports:
+  - name: youth_justice_results_summary
+    description: Youth Justice inspections outcome summary (CSV/Excel)
+    path: ./hmi_youth_justice_summary.csv
+
+  - name: html_summary_page
+    description: HTML-based summary page for public viewing
+    path: ./index.html
+
+  - name: inspection_reports_archive
+    description: Archive of scraped PDF inspection reports
+    path: ./export_data/inspection_reports/
+
+metadata:
+  version: 1.0
+  last_updated: 2025-04-30
+  author: Data to Insight
+  homepage: https://github.com/data-to-insight/hmi-probation-youth-justice-scrape
+  related_projects:
+    - https://data-to-insight.github.io/ofsted-ilacs-scrape-tool/
+    - https://data-to-insight.github.io/ofsted-send-scrape-tool/
+
+# SCCM Type Reference remains same
