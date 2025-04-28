@@ -29,7 +29,7 @@ sccm_alignment:
       type: PERSON
 
     - name: YouthJusticeInspectionEvent
-      label: Youth Justice Inspection Event
+      label: YJ Inspection
       description: A specific inspection conducted by HMIP of a Youth Justice Service
       type: EVENT
       properties:
@@ -38,20 +38,20 @@ sccm_alignment:
         - published_date
 
     - name: YouthJusticeObservation
-      label: Youth Justice Judgement
-      description: Judgement/outcome assigned during an inspection (e.g. "Good", "Requires Improvement")
+      label: YJ Judgements
+      description: Judgement(s)/outcome(s) assigned during an inspection (e.g. "Good", "Requires Improvement")
       type: OBSERVATION
       properties:
         - judgement_type
         - judgement_grade
 
     - name: InspectionSummary
-      label: Youth Justice Inspection Summary
+      label: YJ Inspection Summary
       description: Structured summary of inspection findings for a Local Authority’s Youth Justice Service
       type: STATE
 
     - name: CombinedYouthJusticeSummary
-      label: Youth Justice Combined Summary
+      label: YJ Combined Summary
       description: A compiled dataset of all inspection summaries by Local Authority
       type: COLLECTION
       properties:
@@ -59,7 +59,7 @@ sccm_alignment:
         - version
 
     - name: HMIPYouthJusticeScrapeTool
-      label: Youth Justice Scrape Tool
+      label: YJ Scrape Tool
       description: A Python tool that extracts, processes, and compiles HMIP Youth Justice inspection results
       type: METHOD
 
