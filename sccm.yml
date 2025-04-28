@@ -46,12 +46,12 @@ sccm_alignment:
         - judgement_grade
 
     - name: InspectionSummary
-      label: YJ Inspection Summary
+      label: Inspection Report
       description: Structured summary of inspection findings for a Local Authority’s Youth Justice Service
       type: STATE
 
     - name: CombinedYouthJusticeSummary
-      label: YJ Combined Summary
+      label: YJ Inspections Summary
       description: A compiled dataset of all inspection summaries by Local Authority
       type: COLLECTION
       properties:
