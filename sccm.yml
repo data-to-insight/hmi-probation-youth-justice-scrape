@@ -3,7 +3,10 @@ project:
   description: >
     A Python tool that scrapes and processes Youth Justice inspection reports published by HM Inspectorate of Probation (HMIP),
     extracting structured judgements and outcomes into a summary dataset for local authorities.
-
+  managed_by:
+    - DatatoInsight
+  stakeholders: []
+    
 sccm_alignment:
   entities:
     - name: HMInspectorateOfProbation
